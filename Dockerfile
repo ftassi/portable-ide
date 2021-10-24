@@ -5,8 +5,10 @@ RUN apt-get update && apt-get install -y locales && rm -rf /var/lib/apt/lists/* 
 ENV LANG en_US.utf8
 
 RUN apt-get update && apt-get install -y \
-    neovim git zsh tmux openssh-client \
+    git zsh tmux openssh-client \
     fzf curl httpie jq
+
+RUN add-apt-repository ppa:neovim-ppa/unstable -y && apt-get update && apt-get install -y neovim
 
 COPY entrypoint.sh /bin/entrypoint.sh
 
