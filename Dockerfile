@@ -15,10 +15,16 @@ RUN add-apt-repository ppa:neovim-ppa/unstable -y && apt-get update && \
 
 RUN apt-get update && apt-get install -y cpanminus && cpanm Neovim::Ext --force
 
+# Add some basic shell stuff
+RUN apt-get update && apt-get install -y build-essential openssh-client zsh fzf 
+
+# Add some dev goodies
 RUN apt-get update && apt-get install -y \
-    build-essential \
-    git zsh tmux openssh-client \
-    fzf curl httpie jq
+    tmux \
+    git \
+    curl \
+    httpie \
+    jq
 
 COPY entrypoint.sh /bin/entrypoint.sh
 
