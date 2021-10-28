@@ -27,3 +27,12 @@ WORKDIR /home/me
 
 ENV HOME /home/me
 USER me
+
+RUN git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+RUN ~/.fzf/install
+
+RUN curl -L git.io/antigen > .antigen.zsh
+
+COPY ./config/zsh/.zshrc .
+SHELL ["/usr/bin/zsh", "-c"]
+RUN source .zshrc
