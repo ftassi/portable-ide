@@ -40,5 +40,14 @@ RUN ~/.fzf/install
 RUN curl -L git.io/antigen > .antigen.zsh
 
 COPY ./config/zsh/.zshrc .
+
+ENV NVM_DIR /home/me/.nvm
+ENV NODE_VERSION lts/fermium
+
+# Install nvm with node and npm
+RUN curl -sL https://raw.githubusercontent.com/creationix/nvm/v0.39.0/install.sh | bash \
+  && . $NVM_DIR/nvm.sh \ 
+  && nvm install $NODE_VERSION
+
 SHELL ["/usr/bin/zsh", "-c"]
 RUN source .zshrc
