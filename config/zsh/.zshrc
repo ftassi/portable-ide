@@ -1,4 +1,4 @@
-[ -f ~/.antigen.zsh ] && source ~/.antigen.zsh
+[ -f ~/.antigen/antigen.zsh ] && source ~/.antigen/antigen.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 antigen use oh-my-zsh
 

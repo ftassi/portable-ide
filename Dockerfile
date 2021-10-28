@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install -y build-essential openssh-client zsh fzf
 # Add some dev goodies
 RUN apt-get update && apt-get install -y \
     tmux \
-    git \
+    git git-crypt \
     curl \
     httpie \
     jq
@@ -37,17 +37,23 @@ USER me
 RUN git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 RUN ~/.fzf/install
 
-RUN curl -L git.io/antigen > .antigen.zsh
-
-COPY ./config/zsh/.zshrc .
+RUN mkdir -p $HOME/.antigen
+RUN curl -L git.io/antigen > $HOME/.antigen/antigen.zsh
 
 ENV NVM_DIR /home/me/.nvm
-ENV NODE_VERSION lts/fermium
+ENV NODE_VERSION 14.18.1
+ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
+ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
 # Install nvm with node and npm
 RUN curl -sL https://raw.githubusercontent.com/creationix/nvm/v0.39.0/install.sh | bash \
   && . $NVM_DIR/nvm.sh \ 
-  && nvm install $NODE_VERSION
+  && nvm install $NODE_VERSION 
 
-SHELL ["/usr/bin/zsh", "-c"]
-RUN source .zshrc
+# /Install neovime language server
+RUN npm install -g intelephense
+
+COPY ./config/zsh/.zshrc .
+RUN /bin/zsh /home/me/.zshrc
+
+
