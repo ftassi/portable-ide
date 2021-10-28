@@ -50,10 +50,11 @@ RUN curl -sL https://raw.githubusercontent.com/creationix/nvm/v0.39.0/install.sh
   && . $NVM_DIR/nvm.sh \ 
   && nvm install $NODE_VERSION 
 
-# /Install neovime language server
+# /Install neovim language server
 RUN npm install -g intelephense
+RUN mkdir -p $HOME/intelephense
+COPY ./config/intelephense/licence.txt $HOME/config/intelephense/licence.txt.txt
 
 COPY ./config/zsh/.zshrc .
 RUN /bin/zsh /home/me/.zshrc
-
 
