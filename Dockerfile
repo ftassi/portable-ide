@@ -12,27 +12,30 @@ RUN add-apt-repository universe -y && apt-get update && apt-get install -y pytho
 
 RUN add-apt-repository ppa:neovim-ppa/unstable -y && apt-get update && \
     apt-get install -y neovim 
+RUN update-alternatives --install /usr/bin/vi vi /usr/bin/nvim 60
+RUN update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 60
+RUN update-alternatives --install /usr/bin/editor editor /usr/bin/nvim 60
 
 RUN apt-get update && apt-get install -y cpanminus && cpanm Neovim::Ext --force
 
-# Add some basic shell stuff
-RUN apt-get update && apt-get install -y build-essential openssh-client zsh fzf 
-
-# Add some dev goodies
+# Install packages
 RUN apt-get update && apt-get install -y \
+    build-essential openssh-client zsh fzf \
     tmux \
     git git-crypt \
     curl \
     httpie \
     jq
 
-COPY entrypoint.sh /bin/entrypoint.sh
+# Install nvim plugin deps
+RUN apt-get update && apt-get install -y \
+    sqlite3 libsqlite3-dev \
+    fd-find ripgrep
 
 RUN useradd -ms /bin/zsh me
-WORKDIR /home/me
-
-ENV HOME /home/me
 USER me
+WORKDIR /home/me
+ENV HOME /home/me
 
 RUN git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 RUN ~/.fzf/install
@@ -47,14 +50,20 @@ ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
 # Install nvm with node and npm
 RUN curl -sL https://raw.githubusercontent.com/creationix/nvm/v0.39.0/install.sh | bash \
-  && . $NVM_DIR/nvm.sh \ 
-  && nvm install $NODE_VERSION 
+&& . $NVM_DIR/nvm.sh \ 
+&& nvm install $NODE_VERSION 
 
-# /Install neovim language server
+# Install neovim language server
 RUN npm install -g intelephense
 RUN mkdir -p $HOME/intelephense
-COPY ./config/intelephense/licence.txt $HOME/config/intelephense/licence.txt.txt
+COPY --chown=me ./config/intelephense/licence.txt $HOME/intelephense/licence.txt.txt
 
-COPY ./config/zsh/.zshrc .
+COPY --chown=me ./config/zsh/.zshrc .
 RUN /bin/zsh /home/me/.zshrc
+
+COPY --chown=me config/nvim/.config/nvim/init.vim $HOME/.config/nvim/init.vim
+RUN vim +PlugInstall +qall
+COPY --chown=me config/nvim/.config/nvim/ $HOME/.config/nvim
+
+COPY --chown=me entrypoint.sh /bin/entrypoint.sh
 
