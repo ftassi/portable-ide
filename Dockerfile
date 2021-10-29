@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y cpanminus && cpanm Neovim::Ext --force
 RUN apt-get update && apt-get install -y \
     build-essential openssh-client zsh fzf \
     tmux \
-    git git-crypt \
+    git git-crypt tig \
     curl \
     httpie \
     jq
@@ -64,6 +64,9 @@ RUN /bin/zsh /home/me/.zshrc
 COPY --chown=me config/nvim/.config/nvim/init.vim $HOME/.config/nvim/init.vim
 RUN vim +PlugInstall +qall
 COPY --chown=me config/nvim/.config/nvim/ $HOME/.config/nvim
+
+COPY --chown=me config/git/.gitconfig $HOME/.gitconfig
+COPY --chown=me config/git/.gitignore_global $HOME/.gitignore_global
 
 COPY --chown=me entrypoint.sh /bin/entrypoint.sh
 
