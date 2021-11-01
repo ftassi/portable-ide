@@ -71,6 +71,15 @@ RUN update-alternatives --install /usr/bin/vi vi /usr/bin/nvim 60
 RUN update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 60
 RUN update-alternatives --install /usr/bin/editor editor /usr/bin/nvim 60
 
+# Add xclip to ease clipboard management in vim (and shell in general)
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive \
+        apt-get -y --quiet --no-install-recommends install \
+        xclip \ 
+    && apt-get -y autoremove \
+    && apt-get clean autoclean \
+    && rm -fr /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
+
 # RUN apt-get update \
 #     && DEBIAN_FRONTEND=noninteractive \
 #        apt-get -y --quiet --no-install-recommends install \
