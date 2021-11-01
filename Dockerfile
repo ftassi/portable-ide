@@ -108,11 +108,17 @@ RUN apt-get update \
        curl \
        httpie \
        jq \
+       sudo \
     && apt-get -y autoremove \
     && apt-get clean autoclean \
     && rm -fr /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
 
+# Create a user and allow him to sudo without password
 RUN useradd -ms /bin/zsh me
+RUN adduser me sudo
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+RUN touch ~/.sudo_as_admin_successful
+
 WORKDIR /home/me
 ENV HOME /home/me
 
