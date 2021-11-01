@@ -7,6 +7,7 @@ docker run --rm -it -h dev \
     -v $SSH_AUTH_SOCK:/ssh-agent \
     -v $HOME/.ssh:/home/me/.ssh \
     -v $PWD/config:/home/me/dotfiles \
+    -v $PWD/data/.local/share:/home/me/.local/share \
     -v $PWD:/home/me/workspace \
     --name ide \
     portable-ide 

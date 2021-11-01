@@ -1,0 +1,4 @@
+data/.local/share/zsh/*
+data/.local/share/nvim
+!data/.local/share/README.md
+!data/.local/share/zsh/README.md
