@@ -8,7 +8,7 @@ docker run --rm -it -h dev \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v $SSH_AUTH_SOCK:/ssh-agent \
     -v $HOME/.ssh:/home/me/.ssh \
-    -v $PWD:/home/me/workspace \
+    -v $HOME:/home/me/host \
     -v $path/config:/home/me/dotfiles \
     -v $path/data/.local/share:/home/me/.local/share \
     --name ide \
