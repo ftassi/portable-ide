@@ -1,9 +1,11 @@
 FROM phusion/baseimage:focal-1.1.0
 
 # Install base packages
+RUN yes | unminimize
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive \
        apt-get -y --quiet --no-install-recommends install \
+       man manpages-posix \
        locales \
        build-essential openssh-client curl software-properties-common \
        gcc \
